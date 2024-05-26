@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  sqlserver:
+    image: nvodbc_sqlserver
+    container_name: sqlserver
+    hostname: sqlserver
+    ports:
+      - "1433:1433"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: sqlserver
+
+  neovim:
+    image: nvodbc_neovim
+    container_name: neovim
+    depends_on:
+      - sqlserver
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: neovim
+    volumes:
+      - ./lua/nvodbc:/root/.config/nvim/lua/nvodbc:Z
